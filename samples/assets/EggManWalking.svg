@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.1"
+   preserveAspectRatio="none"
+   x="0px"
+   y="0px"
+   width="500px"
+   height="500px"
+   viewBox="0 0 500 500"
+   id="svg2"
+   inkscape:version="0.48.4 r9939"
+   sodipodi:docname="EggManWalking.svg"
+   inkscape:export-filename="/home/WS/Work/Projects/Games/ivanix4games/samples/CreateJS/EggManWalking.png"
+   inkscape:export-xdpi="90"
+   inkscape:export-ydpi="90">
+  <metadata
+     id="metadata80">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1459"
+     inkscape:window-height="948"
+     id="namedview78"
+     showgrid="false"
+     inkscape:zoom="0.944"
+     inkscape:cx="404.41479"
+     inkscape:cy="245.41748"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg2" />
+  <defs
+     id="defs4">
+    <g
+       id="BodyParts_LimbParts_Top_0_Layer0_0_FILL">
+      <path
+         fill="#000000"
+         stroke="none"
+         d=" M 6.5 -24.05 Q 3.5 -25 0 -25 -3.65 -25 -6.65 -24.05 -12.9 -22.5 -17.9 -17.7 -25 -10.35 -25 0 -25 10.55 -17.9 17.7 -10.5 25 0 25 10.35 25 17.6 17.7 25 10.55 25 0 25 -10.35 17.6 -17.7 12.75 -22.5 6.5 -24.05 Z"
+         id="path7" />
+    </g>
+    <g
+       id="Body_0_Layer1_0_FILL">
+      <path
+         fill="#FFFFFF"
+         stroke="none"
+         d=" M 55.85 -76.45 Q 32.7 -109.1 0 -109.1 -32.7 -109.1 -55.85 -76.45 -79 -43.8 -79 2.4 -79 48.6 -55.85 81.25 -40.8 102.45 -21.7 109.9 -17.8302734375 111.41015625 -13.8 112.35 -7.12734375 113.9 0 113.9 7.12734375 113.9 13.8 112.35 17.861328125 111.41015625 21.75 109.9 40.8 102.45 55.85 81.25 79 48.6 79 2.4 79 -43.8 55.85 -76.45 Z"
+         id="path10" />
+    </g>
+    <g
+       id="BodyParts_Eye_0_Layer0_0_FILL">
+      <path
+         fill="#FF9900"
+         stroke="none"
+         d=" M 41 -7 Q 41 -26.45 27.2 -40.25 13.45 -54 -6 -54 -25.45 -54 -39.25 -40.25 -53 -26.45 -53 -7 -53 12.45 -39.25 26.2 -25.45 40 -6 40 13.45 40 27.2 26.2 41 12.45 41 -7 M -2.85 -9.9 Q -8.75 -4.05 -17 -4.05 -25.3 -4.05 -31.15 -9.9 -37 -15.75 -37 -24.05 -37 -32.3 -31.15 -38.2 -25.3 -44.05 -17 -44.05 -8.75 -44.05 -2.85 -38.2 3 -32.3 3 -24.05 3 -15.75 -2.85 -9.9 Z"
+         id="path13" />
+      <path
+         fill="#FFFFFF"
+         stroke="none"
+         d=" M -17 -4.05 Q -8.75 -4.05 -2.85 -9.9 3 -15.75 3 -24.05 3 -32.3 -2.85 -38.2 -8.75 -44.05 -17 -44.05 -25.3 -44.05 -31.15 -38.2 -37 -32.3 -37 -24.05 -37 -15.75 -31.15 -9.9 -25.3 -4.05 -17 -4.05 Z"
+         id="path15" />
+    </g>
+    <path
+       id="BodyParts_LimbParts_Top_0_Layer0_0_1_STROKES"
+       stroke="#000000"
+       stroke-width="1"
+       stroke-linejoin="round"
+       stroke-linecap="round"
+       fill="none"
+       d=" M 25 0 Q 25 10.55 17.6 17.7 10.35 25 0 25 -10.5 25 -17.9 17.7 -25 10.55 -25 0 -25 -10.35 -17.9 -17.7 -12.9 -22.5 -6.65 -24.05 -3.65 -25 0 -25 3.5 -25 6.5 -24.05 12.75 -22.5 17.6 -17.7 25 -10.35 25 0 Z" />
+    <path
+       id="BodyParts_LimbParts_Top_0_Layer0_1_1_STROKES"
+       stroke="#CC9933"
+       stroke-width="25"
+       stroke-linejoin="round"
+       stroke-linecap="round"
+       fill="none"
+       d=" M 0 -0.05 L 0 119.95" />
+    <path
+       id="BodyParts_LimbParts_Bottom_0_Layer0_0_1_STROKES"
+       stroke="#993300"
+       stroke-width="25"
+       stroke-linejoin="round"
+       stroke-linecap="round"
+       fill="none"
+       d=" M 0 0 L 1 82.95" />
+    <path
+       id="Body_0_Layer1_0_1_STROKES"
+       stroke="#CC6600"
+       stroke-width="1"
+       stroke-linejoin="round"
+       stroke-linecap="round"
+       fill="none"
+       d=" M 79 2.4 Q 79 48.6 55.85 81.25 40.8 102.45 21.75 109.9 17.861328125 111.41015625 13.8 112.35 7.12734375 113.9 0 113.9 -7.12734375 113.9 -13.8 112.35 -17.8302734375 111.41015625 -21.7 109.9 -40.8 102.45 -55.85 81.25 -79 48.6 -79 2.4 -79 -43.8 -55.85 -76.45 -32.7 -109.1 0 -109.1 32.7 -109.1 55.85 -76.45 79 -43.8 79 2.4 Z" />
+    <path
+       id="BodyParts_Eye_0_Layer0_0_1_STROKES"
+       stroke="#0066FF"
+       stroke-width="1"
+       stroke-linejoin="round"
+       stroke-linecap="round"
+       fill="none"
+       d=" M 41 -7 Q 41 12.45 27.2 26.2 13.45 40 -6 40 -25.45 40 -39.25 26.2 -53 12.45 -53 -7 -53 -26.45 -39.25 -40.25 -25.45 -54 -6 -54 13.45 -54 27.2 -40.25 41 -26.45 41 -7 Z" />
+  </defs>
+  <g
+     transform="matrix(1,0,-0.40179086,1,155.04778,340.07288)"
+     id="g22">
+    <g
+       transform="matrix(0.99920654,0.01182556,-0.01182556,0.99920654,47.7,-97.1)"
+       id="g24">
+      <g
+         id="g26">
+        <use
+           xlink:href="#BodyParts_LimbParts_Top_0_Layer0_0_FILL"
+           id="use28"
+           x="0"
+           y="0"
+           width="500"
+           height="500" />
+        <use
+           xlink:href="#BodyParts_LimbParts_Top_0_Layer0_0_1_STROKES"
+           id="use30"
+           x="0"
+           y="0"
+           width="500"
+           height="500" />
+      </g>
+      <g
+         transform="scale(1,0.83332825)"
+         id="g32">
+        <use
+           xlink:href="#BodyParts_LimbParts_Top_0_Layer0_1_1_STROKES"
+           id="use34"
+           x="0"
+           y="0"
+           width="500"
+           height="500" />
+      </g>
+    </g>
+    <g
+       transform="matrix(0.99920654,0.01301575,-0.01301575,0.99920654,46.8,-7.05)"
+       id="g36">
+      <g
+         id="g38">
+        <use
+           xlink:href="#BodyParts_LimbParts_Bottom_0_Layer0_0_1_STROKES"
+           id="use40"
+           x="0"
+           y="0"
+           width="500"
+           height="500" />
+      </g>
+    </g>
+  </g>
+  <g
+     transform="translate(242.64407,179.6322)"
+     id="g42">
+    <g
+       id="g44">
+      <use
+         xlink:href="#Body_0_Layer1_0_FILL"
+         id="use46"
+         x="0"
+         y="0"
+         width="500"
+         height="500" />
+      <use
+         xlink:href="#Body_0_Layer1_0_1_STROKES"
+         id="use48"
+         x="0"
+         y="0"
+         width="500"
+         height="500" />
+    </g>
+    <g
+       transform="matrix(0.44680786,0,0,0.42553711,32.7,-49)"
+       id="g50">
+      <g
+         id="g52">
+        <use
+           xlink:href="#BodyParts_Eye_0_Layer0_0_FILL"
+           id="use54"
+           x="0"
+           y="0"
+           width="500"
+           height="500" />
+        <use
+           xlink:href="#BodyParts_Eye_0_Layer0_0_1_STROKES"
+           id="use56"
+           x="0"
+           y="0"
+           width="500"
+           height="500" />
+      </g>
+    </g>
+  </g>
+  <g
+     transform="matrix(0.89477296,-0.44652138,0.44652138,0.89477296,252.98148,358.51093)"
+     id="g58">
+    <g
+       transform="matrix(0.99920654,0.01182556,-0.01182556,0.99920654,47.7,-97.1)"
+       id="g60">
+      <g
+         id="g62">
+        <use
+           xlink:href="#BodyParts_LimbParts_Top_0_Layer0_0_FILL"
+           id="use64"
+           x="0"
+           y="0"
+           width="500"
+           height="500" />
+        <use
+           xlink:href="#BodyParts_LimbParts_Top_0_Layer0_0_1_STROKES"
+           id="use66"
+           x="0"
+           y="0"
+           width="500"
+           height="500" />
+      </g>
+      <g
+         transform="scale(1,0.83332825)"
+         id="g68">
+        <use
+           xlink:href="#BodyParts_LimbParts_Top_0_Layer0_1_1_STROKES"
+           id="use70"
+           x="0"
+           y="0"
+           width="500"
+           height="500" />
+      </g>
+    </g>
+    <g
+       transform="matrix(0.99920654,0.01301575,-0.01301575,0.99920654,46.8,-7.05)"
+       id="g72">
+      <g
+         id="g74">
+        <use
+           xlink:href="#BodyParts_LimbParts_Bottom_0_Layer0_0_1_STROKES"
+           id="use76"
+           x="0"
+           y="0"
+           width="500"
+           height="500" />
+      </g>
+    </g>
+  </g>
+</svg>
