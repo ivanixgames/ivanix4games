@@ -1,0 +1,69 @@
+html, body {
+        font-family: Arial, Helvetica, sans-serif;
+        text-align: center;
+        background: #005555;
+        color: #00aaff;
+}
+#top {
+    margin: 0 auto;
+}
+#canvas1 {
+
+    width: 500px;
+    
+    height: 600px;
+
+    background: #000000;
+    margin: 0 auto;
+    /*
+    border-radius: 30px;
+    */
+    border: 2px solid;
+    padding: 10px;    
+}
+#hud {
+    display: none;
+    visibility: visible;
+    height: 100px;
+    width: 500px;
+
+
+    margin: 0 auto;
+    
+    margin-top: 20px;
+    margin-bottom: 20px;
+ 
+    border: 2px solid;
+    padding: 10px;
+    border-radius: 20px;
+ /*
+    position: relative;
+    bottom: 200px;
+ */
+}
+#hud a {
+    background: url(../assets/arrows.png) no-repeat 0 0;
+    width: 100px;
+    height: 100px;
+    float: left;
+    border: 1px solid #00ff00;
+    border-radius: 20px;
+    margin-left: 10px;
+    margin-right: 10px;
+    text-decoration: none;
+
+    text-align: center;
+    color: #00ff00;
+}
+#hud a:nth-child(1) {
+    background-position-x: 0px;
+}
+#hud a:nth-child(2) {
+   background-position-x: -100px;
+}
+#hud a:nth-child(3) {
+   background-position-x: -200px;
+}
+#hud a:nth-child(4) {
+   background-position-x: -300px;
+}
