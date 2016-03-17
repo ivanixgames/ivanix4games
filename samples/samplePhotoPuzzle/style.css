@@ -3,11 +3,13 @@ html, body {
         text-align: center;
         background: #005555;
         color: #00aaff;
+        margin: 0;
 }
 #top {
     margin: 0 auto;
 }
-#canvas1 {
+
+#xxxcanvas1 {
 
     width: 500px;
     

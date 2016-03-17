@@ -1,236 +1,30 @@
 var ivx = {
-    CWIDTH: 500,
-    CHEIGHT: 610,
-    div: 3
+    canvasWIDTH: 600,
+    canvasHEIGHT: 800,
+    btnSIZE: 100, 
+    btnPAD: 10, 
+    tweenTIME: 300,
+    assets: '../assets/',
+    photo: 'samplePortrait2.jpg'
 };
 
 
 var saveCpu;
-var IvxImageRsc2 = function( ) {
-    var thisObj;
-    thisObj =  this;
-    this.read = function (url) {
-
-        $.get( url, function (data) {
-            thisObj.data  = data;
- 
-        }).error(function (err) {
-            console.error('IvxImgRsc: failed');
-        });
-    };    
-};
-var IvxImageRscWks = function () {
-    var thisObj;
-    thisObj = this;
-    this.read = function (url) {
-        $(function(){
-            var $ul = $('ul');
-            $.ajax({
-                dataType: 'jsonp',
-                url: 'https://picasaweb.google.com/data/feed/api/user/ivanixdev/albumid/6261590518609850289',
-                data: {
-                    alt: 'json-in-script',
-                },
-                success: function(data){
-                    thisObj.photos = [];
-                    $.each(data.feed.entry, function(){
-                        thisObj.photos.push({
-                            src: this.content.src
-                        });
-                    });
-
-                },
-                error: function(){
-                    alert('failed ;(');
-                }
-            });
-        });
-    };
-    
-};
-var IvxSvcPhotos = function () {
-    var thisObj, objGroups, objPhotos;
-    thisObj = this;
-    this._url = 'https://picasaweb.google.com/data/feed/api/user/';
-
-    this._read = function (url, cb) {
-        $(function(){
-            $.ajax({
-                dataType: 'jsonp',
-                url: url,
-                data: {
-                    alt: 'json-in-script',
-                },
-                success: function(data){
-                    console.log('IvxImgRsc: success');
-                    cb(true, data);
-                },
-                error: function(jqxhr, txt, http) {
-                    console.error('IvxImgRsc: read failed!: ' + txt + '/' + http);
-                     cb(false, {txt: txt, http: http});
-                }
-            });
-        });
-        //todo:
-        // get albums titles
-        // get photo urls in album
-        // store url list localstorage
-        // reload game with new url image into phasor
-    };
-    thisObj.groups = {};
-    objGroups = thisObj.groups;
- 
-    objGroups._fetch = function(ok, data, cb) {
-        var entry;
-        if (!ok) {
-            console.error('IvxSvcPhotos.groups._fetch: error: ' + data)
-            cb(ok, data);
-            return;
-        }
-        thisObj.data  = data;
-        objGroups.entries = [];
-        $.each(data.feed.entry, function() {
-            var split;
-            split = this.title.$t.split('/');
-            // ivanixdev: ugly hack!
-            // google picasa and photos does not support nested albums
-            // so we use '/' to denote psuedo nested folder path.
-            if (split.length < 2) {
-                return true;
-            }
-            entry = {};
-            
-            entry.path = this.title.$t;
-            entry.split = split;
-
-            entry.desc = this.media$group.media$description.$t;
-            entry.count = this.gphoto$numphotos.$t;
-            $.each(this.link, function() {          
-                if (this.type === "application/atom+xml" && this.rel === "http://schemas.google.com/g/2005#feed") {
-                   
-                    entry.link = this.href;
-                }
-            })
-            objGroups.entries.push(entry);
-        });
-        objGroups.sorted = objGroups.entries.sortOn('path');
-        objGroups.cd();
-        console.log('svcPhotos.fetch: found: ' + objGroups.entries.length);
-        cb(ok);
-    };
-    objGroups.fetch = function(user, cb) {
-        var url;
-        if (!cb) {
-            cb = function() {};
-        }
-        
-        url = thisObj._url + user;
-        
-        thisObj._read(url, function(ok, data) {
-             objGroups._fetch(ok, data, cb);
-        });
-    };
-    objGroups.selected = null;
-    objGroups._cdArr = [];
-    objGroups._cdFound = {};
-    
-    objGroups.path = function() {
-      return objGroups._cdArr.join('/');  
-    };
-    objGroups.folders = function() {
-      return objGroups._cdFound.folders;  
-    };    
-    objGroups.photos = function() {
-        return objGroups._cdFound.photos;
-    };
-    objGroups.cd = function(dir) {
-        var i, sorted, length,   pattern, depth, sublist, val, count, unique;
-                
-        objGroups.selected = null;
-        switch (dir) {
-            case undefined:
-            case '':
-                objGroups._cdArr = [];
-                break;
-            case '..':
-                objGroups._cdArr.pop();
-                break;
-            default:
-                if (dir) {
-                    objGroups._cdArr.push(dir);                  
-                }
-
-        }
-
-        pattern = objGroups._cdArr.join('/');
-        sorted = objGroups.sorted;
-        length = sorted.length;
-        sublist =[];
-        depth = objGroups._cdArr.length;
-        count = 0;     
-        for(i = 0; i < length; i++ ) {
-            var o = sorted[i];
-            //console.log('dir:  looping i: ' + i);
-            if (!o.path.indexOf(pattern) && pattern.length < o.path.length) {
-                val = o.split[depth];
-                if (!(sublist.length && sublist[sublist.length - 1] === val)) {
-                    //console.log('dir: found idx: ' + i);
-                    sublist.push(o.split[depth]);
-                }                
-            }
-            if (o.path === pattern) {
-                count  = o.count;
-                unique = o;
-            }
-        }
-
-        objGroups._cdFound =  {folders: sublist, photos: count, entry: unique };
-    };
-
-    thisObj.photos = {};
-    objPhotos = thisObj.photos;
-    objPhotos.entries = [];
-    objPhotos._fetch = function(ok, data, cb) {
-
-        if (!ok) {
-            console.error('IvxSvcPhotos.photos._fetch: error: ' + data);
-            cb(ok, data);
-            return;
-        }
-        console.log('IvxSvcPhotos.photos.fetch: ok');
-        objPhotos.data = data;
-        objPhotos.entries = data.feed.entry;
-        cb(ok, objPhotos.entries);
-    };    
-    objPhotos.fetch = function(cb) {
-        var url;
-        if (!objGroups._cdFound.entry) {
-            console.error('IvxSvcPhotos.photos.fetch: error!');
-            return false;
-        }
-        url = objGroups._cdFound.entry.link;
-        thisObj._read(url, function(ok, data) {
-            objPhotos._fetch(ok, data, cb);
-        });
-        return true;      
-    };
-};
 
 
-var IvxBtn = Ivx.fcn.extend(Phaser.Button,'PSprite', function(game, idx, onclick) {
-    var x, y, thisObj;
+var IvxBtn = Ivx.extend(Phaser.Button,'PSprite', function(group, idx, onclick) {
+    var x, y, thisObj, bgIdx, activeIdx;
 
-    y = 505;
+    y = ivx.canvasHEIGHT - ivx.btnSIZE - ivx.btnPAD;
     x = 20+ (120 * idx);
-    console.log('IvxBtn: idx: ' + idx + ' x: ' + x + ' y: ' + y);
-    //Phaser.Sprite.call(this, game, x, y, 'arrows', idx);
+    bgIdx = 4;
     
     thisObj = this;
-    Phaser.Button.call(this, game, x, y, 'arrows', function() {
-        //thisObj.eventClicked(idx);
+    Phaser.Button.call(this, group.game, x, y, 'arrows', function() {
         onclick();
     },
-    idx, idx, idx);
+    bgIdx, bgIdx, bgIdx);
+    group.add(this);
     
     this.onInputDown.add(function() {
        thisObj.eventInputDown(idx); 
@@ -238,40 +32,54 @@ var IvxBtn = Ivx.fcn.extend(Phaser.Button,'PSprite', function(game, idx, onclick
     this.onInputUp.add(function() {
         thisObj.eventInputUp(idx);
     });
-    game.add.existing(this);
     
-    this.border = new Phaser.Sprite(game, 0, 0, 'arrows', 4);
+    //game.add.existing(this);
+    
     this.active = new Phaser.Sprite(game, 0, 0, 'arrows', 5);
-    this.addChild(this.border);
+    this.icon = new Phaser.Sprite(game, 0, 0, 'arrows', idx);
     this.addChild(this.active);
+    this.addChild(this.icon);
     this.active.visible = false;
 
 });
 IvxBtn.prototype.eventClicked = function(idx) {
-    console.log('eventClicked: ' + idx);  
+    //console.log('eventClicked: ' + idx);  
 };
 IvxBtn.prototype.eventInputDown = function(idx) {
-    console.log('eventInputDown: ' + idx); 
+    //console.log('eventInputDown: ' + idx); 
     this.active.visible = true;
 };
 IvxBtn.prototype.eventInputUp = function(idx) {
-    console.log('eventInputUp: ' + idx); 
+    //console.log('eventInputUp: ' + idx); 
     this.active.visible = false;
 };
-var IvxTile = Ivx.fcn.extend(Phaser.Sprite,'PSprite', function(group) {
-    var cellArr, thisObj, col, row, x, y;
+
+var IvxTile = Ivx.extend(Phaser.Sprite,'PSprite', function(group, size, cols, offx, offy) {
+    var thisObj, col, row, x, y, midpoint, rect;
     
-    group.cellArr = group.cellArr || [];
-    this.cellArr = group.cellArr;
-    this.idx = this.cellArr.length;
+    this.idx = group.cellArr.length;
+
+
+    this.offx = offx;
+    this.offy = offy;
     
 
-    col = this.idx % ivx.div;
-    row = (this.idx / ivx.div)|0;
-    x = col * ivx.w + (ivx.w/2|0);
-    y = row * ivx.h + (ivx.w/2|0);
+    col = this.idx % cols;
+    row = (this.idx / cols)|0;
+    midpoint = size/2|0;
+
+    x = col * size;
+    y = row * size;
+
+    rect = {x: x, y: y, width: size, height: size}
+    this.ivxrect = rect;
+
+     x +=  midpoint + offx;
+     y +=  midpoint;
  
-    Phaser.Sprite.call(this, group.game, x, y, 'puzzle', this.idx);
+    Phaser.Sprite.call(this, group.game, x, y, 'puzzle');
+
+    this.crop(rect);
 
     this.anchor.setTo(0.5);
     this.inputEnabled = true;
@@ -279,6 +87,7 @@ var IvxTile = Ivx.fcn.extend(Phaser.Sprite,'PSprite', function(group) {
     
     thisObj = this;
     this.events.onDragStart.add(function(sprite, pointer) {
+
         thisObj.onDragStart(sprite, pointer); 
     });
     this.events.onDragStop.add(function(sprite, pointer) {
@@ -286,7 +95,7 @@ var IvxTile = Ivx.fcn.extend(Phaser.Sprite,'PSprite', function(group) {
     }); 
     
     group.add(this);
-    this.cellArr.push(this);
+    group.cellArr.push(this);
     this.orig = {
         txt: this.texture,
         angle: this.angle,
@@ -296,25 +105,56 @@ var IvxTile = Ivx.fcn.extend(Phaser.Sprite,'PSprite', function(group) {
         y: this.y,
         tint: this.tint
     };
-    group.active(this);    
-});
-IvxTile.prototype.matches = function (animate) {
-    var o, matches;
-    o = this.orig;
-    matches =  (!this.angle) && (this.x === o.x) && (this.y === o.y) && (this.scale.x + this.scale.y ===2) &&  (this.texture === o.txt);
+    //group.select(this);    
+    //this.tween =this.game.add.tween(this);
 
-    if (this !== this.parent._active) {
-        if (matches) {
-            this.tint = this.orig.tint && 0xffffff;
-        } else {
-            this.tint = this.orig.tint && 0xff5555;
-        }
-    } else {
-        this.tint = this.orig.tint && 0x00ff00;
+});
+IvxTile.prototype.isCorrect = function () {
+    var o, correct;
+    o = this.orig;
+
+    if (this.scale.x < 0 && this.scale.y < 0) {
+        this.scale.x *= -1;
+        this.scale.y *= -1;
+        this.angle += 180;
     }
-    matches && animate && this.parent.animateMatched();
+
+
+    correct =  (!this.angle) && (this.x === o.x) && (this.y === o.y) && (this.scale.x + this.scale.y ===2) &&  (this.texture === o.txt);
+
+    return correct;
+};
+
+IvxTile.prototype.isActive = function () {
+    return this === this.parent.active;
+};
+IvxTile.prototype.adjustTint = function () {
+    if (this.isCorrect()) {
+       this.tint = this.orig.tint && 0xffffff;
+    } else {
+       if (this.isActive()) {
+            this.tint = this.orig.tint && 0x00ff00;
+       } else {
+           this.tint = this.orig.tint && 0xff5555;
+       }
+    }
+};
+
+IvxTile.prototype.onCorrect = function (animate) {
+    var correct;
+
+    correct = this.isCorrect();
+    if (correct) {
+       this.inputEnabled = false;
+       if (this.isActive()) {
+        this.parent.active = null;
+        this.parent.onActive(false);
+       }
+    }
+    this.adjustTint();
+    correct && animate && this.parent.animateCorrect();
     
-    return matches;
+    return correct;
 };
 
 IvxTile.prototype.swap = function (tile) {
@@ -335,29 +175,32 @@ IvxTile.prototype.swap = function (tile) {
 };
 IvxTile.prototype.swapIdx = function (idx) {
     var tile;
-    tile = this.cellArr[idx];
+    tile = this.parent.cellArr[idx];
     this.swap(tile);
     return tile;
 };
 IvxTile.prototype.calcIdx = function() {
     var col, row, idx, tile;
  
-    col = ((this.x  ) / ivx.w)|0;
-    row = ((this.y ) / ivx.h)|0;
+    col = ((this.x - this.offx  ) / Math.abs(this.width))|0;
+    row = ((this.y ) / Math.abs(this.height))|0;
     
-    idx = col + row * ivx.div;
-    if (idx < this.cellArr.length) {
+    idx = col + row * this.parent.cols;
+    if (idx < this.parent.cellArr.length) {
         return idx;
     }
     return this.idx;
 };
 IvxTile.prototype.onDragStart = function (sprite, pointer) {
 
-    this.parent.active(this);
+    this.origActive =  this.parent.active;
+    this.parent.onActive(false);
+    
+    this.parent.active = this;
+
     this.last = { x: this.x, y: this.y, type: this.position.type};
     this.bringToTop();
 };
-
 IvxTile.prototype.onDragStop = function (sprite, pointer) {
 
     var idx, tile;
@@ -368,178 +211,269 @@ IvxTile.prototype.onDragStop = function (sprite, pointer) {
     this.x = this.last.x;
     this.y = this.last.y;
     if (this !== tile) {
-        this.parent.active(tile);
+        this.parent.active = tile;
+        this.onCorrect();
+    } else {
+        if (this.origActive === this) {
+            this.parent.active = null;
+        }
     }
+    this.parent.onActive(this.parent.active);
     
-    tile.matches(true) && this.parent.completed();
+    tile.onCorrect(true) && this.parent.completed();
     
 };
+IvxTile.prototype._turn = function () {
 
-
-IvxTile.prototype.turnRight = function () {
-    this.angle += 90; 
-    this.matches(true) && this.parent.completed();
+    this.parent.tween = null;
+    this.parent.onActive(true);
+    this.onCorrect(true) && this.parent.completed();
     
+};
+IvxTile.prototype.turnRight = function () {
+    var thisObj, angle, parent;
+
+    thisObj = this;
+    angle = this.angle + 90;
+
+    parent = this.parent
+    parent.onActive(false);
+    parent.tween =this.game.add.tween(this);
+    parent.tween.to({angle: angle}, ivx.tweenTIME , Phaser.Easing.Linear.None, true);
+    parent.tween.onComplete.addOnce(function() {thisObj._turn();}, this);
 };
 IvxTile.prototype.turnLeft = function () {
-    this.angle -= 90; 
-    this.matches(true) && this.parent.completed();
+    var thisObj, angle, parent;
+
+    thisObj = this;
+    angle = this.angle - 90;
+
+    parent = this.parent
+    parent.onActive(false);
+    parent.tween =this.game.add.tween(this);
+    parent.tween.to({angle: angle}, ivx.tweenTIME , Phaser.Easing.Linear.None, true);
+    parent.tween.onComplete.addOnce(function() {thisObj._turn();}, this);
     
 };
 IvxTile.prototype.flipH = function () {
-    this.scale.x *= -1; 
-    this.matches(true) && this.parent.completed();
-    
+    var thisObj, parent, val;
+
+    val = this.scale.x * -1; 
+
+    thisObj = this;
+    parent = this.parent
+    parent.onActive(false);
+    parent.tween =this.game.add.tween(this.scale);
+    parent.tween.to({x: val}, ivx.tweenTIME , Phaser.Easing.Linear.None, true);
+    parent.tween.onComplete.addOnce(function() {thisObj._turn();}, this);
+
 };
 IvxTile.prototype.flipV = function () {
-    this.scale.y *= -1; 
-    this.matches(true) && this.parent.completed();  
-}
+    var thisObj, parent, val;
+
+    val = this.scale.y * -1; 
+
+    thisObj = this;
+    parent = this.parent
+    parent.onActive(false);
+    parent.tween =this.game.add.tween(this.scale);
+    parent.tween.to({y: val}, ivx.tweenTIME , Phaser.Easing.Linear.None, true);
+    parent.tween.onComplete.addOnce(function() {thisObj._turn();}, this);
+
+};
 
 IvxTile.prototype.shuffle = function () {
     var idx;
     
-    idx = Math.floor(Math.random() * this.cellArr.length);
+    idx = Math.floor(Math.random() * this.parent.cellArr.length);
     this.swapIdx(idx);
     
     this.scale.x = Math.floor(Math.random()  * 2)||-1;
     this.scale.x = Math.floor(Math.random()  * 2)||-1;
 
     this.angle  = (Math.floor(Math.random() * 4) * 90);
-    this.matches();
+    this.onCorrect();
 };
-function createTileGroup (obj) {
-    obj._active = null;
-    obj._shuffleDELAY = 1000;    
-    obj.active = function(tile) {
-        var current;
-        
-        if (!tile) {
-            return this._active;
-        }
-        if (this._active) {
-            
-             
-            current = this._active;
-            this._active = null;
-            current.matches();
-            
-        }  
-        if (current !== tile) {
-            tile.tint = tile.orig.tint && 0x00ff00;
-            this._active = tile;         
-        }
+var IvxTileGroup = Ivx.extend(Phaser.Group,'PGroup', function(game) {
+    Phaser.Group.call(this, game);
+    var activeTile = null;
+    var thisObj = this;
 
-    };
-       
-    obj.breed = function(size) {
-      for(var i=0; i < size; i++) {
-          new IvxTile(obj);
-      }  
-    };
-    obj._shuffle = function() {
-      var len = this.children.length;
-      for(var i=0; i < len; i++) {
-          this.children[i].shuffle();
-      }  
-    };
-    obj.shuffle = function() {
-        this._shuffleTO = window.setTimeout(function() {
-                obj._shuffle();
-            },
-            obj._shuffleDELAY
-        );
-    };
-    obj.completed = function() {
-      var len, tile;
-      len = this.cellArr.length;
-      for(var i = 0; i < len; i++) {
-          if (!this.cellArr[i].matches()) {
-              return false;
-          }
-      }  
-      tile = this._active;
-      if (tile) {
-          this._active = null;
-          tile.matches();
-      }
-      console.log('puzzle complete!');
-      return true;
-    };
-    obj.animateMatched = function() {
-      console.log('animateMatched!');  
-    };
-    
-    return obj;
-}
-function xxxcreateHud() {
-    ivx.hud = document.querySelector('#hud');
-    ivx.hud.onclick = function(e) {
-        var tile;
-        if (!e.target || !e.target.id || !ivx.tileGrp._active) {
-            return;
+
+    Object.defineProperty(this, "active", {
+        set: function(tile) {
+            var prior;
+
+            prior = activeTile;
+            activeTile = tile;
+
+            prior && prior.adjustTint();
+
+            activeTile &&  activeTile.adjustTint();
+            
+        },
+        get: function() {
+            return activeTile;
         }
-        tile = ivx.tileGrp._active;
-        switch (e.target.id) {
-            case 'btnLeft':
-                tile.turnLeft();
-                break;
-            case 'btnRight':
-                tile.turnRight();
-                break;
-            case 'btnFlipV':
-                tile.flipV();
-                break;
-            case 'btnFlipH':
-                tile.flipH();
-                break;
-        }
-        e.preventDefault();
-    };
-    
+    });
+    this._shuffleDELAY = 1000;
+    this.cellArr = [];
+});
+IvxTileGroup.prototype.onActive = function(active) { 
+    console.log('IvxTileGroup.onActive: **todo: override **');
 };
-function createHud() {
-   var btn;
-   btn = new IvxBtn(game, 0, function() {
-       ivx.tileGrp._active && ivx.tileGrp._active.turnLeft();
+    
+IvxTileGroup.prototype.select = function(tile, onDragStart) {
+      var current;
+      current = this.active;
+
+      if (this.active) {
+          this.active = null;
+      }  
+      if (current !== tile) {
+          this.active = tile;         
+      }
+};
+     
+IvxTileGroup.prototype.breed = function(cols) {
+    var bg, w, h, rows, size, count, tth, offx, offy, puzzleHeight;
+
+    bg = game.add.sprite(0,0, 'puzzle');
+    //bg.visible = false;
+    
+    ivx.bg = bg;
+
+    puzzleHeight = ivx.canvasHEIGHT - ivx.btnSIZE - 2 * ivx.btnPAD;
+
+    size = (bg.width / cols)|0;
+
+    //rows = (bg.height / size)|0;
+    rows = (puzzleHeight / size)|0;
+    count = cols * rows;
+
+    this.cols = cols;
+    this.rows = rows;
+    this.size = size;
+
+    offx = (ivx.canvasWIDTH - bg.width)/2|0;
+
+    tth = (rows * size)
+    offy = (ivx.canvasHEIGHT - tth)/2|0;
+
+    bg.x += offx;
+    this.add(bg);
+
+    for(var i=0; i < count; i++) {
+        new IvxTile(this, size, cols, offx, offy);
+    }  
+};
+IvxTileGroup.prototype._shuffle = function() {
+    var len = this.cellArr.length;
+    for(var i=0; i < len; i++) {
+        this.cellArr[i].shuffle();
+    }  
+};
+IvxTileGroup.prototype.shuffle = function() {
+    var thisObj = this;
+
+    this._shuffleTO = window.setTimeout(function() {
+            thisObj._shuffle();
+        },
+        thisObj._shuffleDELAY
+    );
+};
+IvxTileGroup.prototype.completed = function() {
+    var len, tile;
+    len = this.cellArr.length;
+    for (var i = 0; i < len; i++) {
+        if (!this.cellArr[i].isCorrect()) {
+            return false;
+        }
+    }  
+    this.onActive(null);
+    console.log('puzzle complete!');
+    return true;
+};
+IvxTileGroup.prototype.animateCorrect = function() {
+    console.log('animateCorrect!');  
+};
+    
+
+function createHud(tileGroup) {
+   var btn, group;
+
+   group = game.add.group();
+   
+   btn = new IvxBtn(group, 0, function() {
+      tileGroup.active && tileGroup.active.turnLeft();
    });
-   btn = new IvxBtn(game, 1,  function() {
-       ivx.tileGrp._active && ivx.tileGrp._active.flipV();
+   btn = new IvxBtn(group, 1,  function() {
+       tileGroup.active && tileGroup.active.flipV();
    });
-   btn = new IvxBtn(game, 2,  function() {
-       ivx.tileGrp._active && ivx.tileGrp._active.flipH();
+   btn = new IvxBtn(group, 2,  function() {
+       tileGroup.active && tileGroup.active.flipH();
    });
-   btn = new IvxBtn(game, 3,  function() {
-      ivx.tileGrp._active && ivx.tileGrp._active.turnRight();
+   btn = new IvxBtn(group, 3,  function() {
+      tileGroup.active && tileGroup.active.turnRight();
    });
+
+   group.adjustButtons = function () {
+        var i, len, avl, pad;
+        len = this.children.length;
+
+        avl = ivx.canvasWIDTH - (ivx.btnSIZE * len);
+        pad = avl / (len + 1)
+
+        for(i=0; i < len; i++) {
+            this.children[i].x =  pad +  (i * (ivx.btnSIZE + pad));
+            // this.children[i].y =  pad;
+        };
+
+   };
+   group.adjustButtons();
+
+   tileGroup.onActive = function(tile) {
+
+       if (tile) {
+           group.visible = true;
+       } else {
+           group.visible = false;
+       }
+   };
+
+   group.visible = false;
+
+   return group;
 };
 function preload() {
-
-    var w, h;
-    ivx.w = ivx.CWIDTH / ivx.div;
-    ivx.h = ivx.CWIDTH / ivx.div;
+    var path;
     
-    game.load.spritesheet('puzzle', '../assets/Sample1b.jpg', ivx.w, ivx.h);
-    game.load.spritesheet('arrows', '../assets/arrows.png', 100, 100);    
+    game.scale.scaleMode = Phaser.ScaleManager.EXACT_FIT;
+    game.load.spritesheet('arrows', '../assets/arrows.png', ivx.btnSIZE, ivx.btnSIZE); 
+
+    path = ivx.assets + ivx.photo;
+
+    game.load.image('puzzle', path);
+   
 }
 function create() {
     
-    var size, tileGrp, tile, i;
+    var size, tileGroup, btnGroup;
     
 	saveCpu = game.plugins.add(Phaser.Plugin.SaveCPU);
 
-    createHud();
-    
-    size = ivx.div * ivx.div;
-    
-    tileGrp = createTileGroup(game.add.group());
-    tileGrp.breed(size);
-    tileGrp.shuffle();
-    
-    ivx.tileGrp = tileGrp;    
 
+    
+    tileGroup = new IvxTileGroup(game);
+    btnGroup = createHud(tileGroup);
+
+    tileGroup.breed(4);
+    tileGroup.shuffle();
+
+    ivx.tileGroup = tileGroup;    
+    ivx.btnGroup = btnGroup;
 
 }
 
 
-var game = new Phaser.Game(ivx.CWIDTH, ivx.CHEIGHT, Phaser.AUTO, 'canvas1', { preload: preload, create: create });
+var game = new Phaser.Game(ivx.canvasWIDTH, ivx.canvasHEIGHT, Phaser.AUTO, 'canvas1', { preload: preload, create: create });
