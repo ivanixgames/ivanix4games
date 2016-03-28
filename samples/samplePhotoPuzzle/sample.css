@@ -1,0 +1,12 @@
+html, body {
+  font-family: Arial, Helvetica, sans-serif;
+  text-align: center;
+  background: #005555;
+  margin: 0;
+}
+div#canvas1 {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    -webkit-transform: translate(-50%,-50%);
+}

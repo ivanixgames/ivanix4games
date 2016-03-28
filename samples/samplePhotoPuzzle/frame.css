@@ -1,0 +1,102 @@
+html, body {
+  font-family: Arial, Helvetica, sans-serif;
+  text-align: center;
+  background: #005555;
+  color: #00aaff;
+  margin: 0 auto;
+  padding: 0;
+}
+
+
+div#device, div#orient {
+    margin: 0 auto;
+}
+div#orient-angle {
+    width: 100%;
+    height: 100%;
+    margin: 0 auto;
+    padding: 0;
+}
+div#device.desktop-true .orient-land  {
+    width: 80vw;
+    height: 50vw;
+    position: relative;
+    top: 2vh;
+}
+div#device.desktop-true .orient-port  {
+    width: 60vh;
+    height: 90vh;
+    position: absolute;
+
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%,-50%);
+}
+object {
+    display: block;       
+    background: #000;
+    border: none;
+    width: 100%;
+    height: 100%; 
+    margin: 0 auto;  
+    
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    -webkit-transform: translate(-50%,-50%);      
+}
+@media screen and (orientation: portrait) {
+    #device.desktop-false div#orient.orient-port object {
+        width: 100vw;    
+        height: 100vh;     
+    }
+}
+@media screen and (orientation: landscape) {
+    #device.desktop-false div#orient.orient-port object {
+ 
+        width: 99vh;        
+        height: 99vw;
+        -webkit-transform: translate(-50%,-50%)rotate(-90deg);        
+         
+    }
+    div#orient.orient-port #orient-angle.deg270 object {     
+        -webkit-transform: translate(-50%,-50%)rotate(90deg);      
+    }    
+}
+
+@media screen and (orientation: landscape) {
+    #device.desktop-false div#orient.orient-land object {
+        width: 99vw;    
+        height: 90vh;     
+        margin-top: 0vh;
+
+    } 
+}
+@media screen and (orientation: portrait) {
+    #device.desktop-false div#orient.orient-land object {     
+        width: 99vh;        
+        height: 99vw;
+        position: absolute;
+        -webkit-transform: translate(-50%,-50%)rotate(90deg); 
+
+    }
+  
+}
+
+div#ivx-fullscreen {
+
+    background: #00aaff;
+
+    border-top-left-radius: 0.75vw;
+    border-top-right-radius: 0.75vw;
+    border-bottom-right-radius: 0.75vw;
+        
+    height: 2vh;
+    width: 2vh;
+
+
+    position: fixed;    
+    top: 0;
+    right: 0;
+    
+}
