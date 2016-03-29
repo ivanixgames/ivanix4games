@@ -371,8 +371,8 @@ IvxTileGroup.prototype.eventPuzzleScaled = function() {
 };
 IvxTileGroup.prototype.prep = function(bg) {
     var thisObj, sample, bmd, url, cols, rows, 
-        size, count,
-        scale, offx, offy,  mag, h;
+        size, sizex, sizey,
+        count, scale, offx, offy,  mag, h;
 
     thisObj = this;
 
@@ -384,6 +384,7 @@ IvxTileGroup.prototype.prep = function(bg) {
 
     sample.aspectRatio = sample.width / sample.height;
     
+    /*
     if (sample.aspectRatio > game.scale.aspectRatio) {
         scale = game.width / sample.width;
         size = (game.width / cols)|0;
@@ -393,7 +394,23 @@ IvxTileGroup.prototype.prep = function(bg) {
         //todo:
         rows = cols;
         size = (game.height / rows)|0;
-        cols =  (0.5 + ((sample.width * scale)/size))|0;
+        //cols =  (0.5 + ((sample.width * scale)/size))|0;
+        cols =  (0 + ((sample.width * scale)/size))|0;
+    }
+    */
+
+    if (sample.aspectRatio > game.scale.aspectRatio) {
+        scale = game.width / sample.width;
+    } else {
+        scale = game.height / sample.height;
+    }
+    if (game.scale.aspectRatio < 1 ) {
+        size = (game.width / cols)|0;
+        rows =  (((sample.height * scale)/size))|0;
+    } else {
+        rows = cols;
+        size = (game.height / rows)|0;
+        cols =  (((sample.height * scale)/size))|0;
     }
     
 
@@ -419,7 +436,7 @@ IvxTileGroup.prototype.prep = function(bg) {
     sample.x = offx;
     sample.y = offy;
     bmd.draw(sample, offx, offy);
-    url = bmd.canvas.toDataURL();
+   //url = bmd.canvas.toDataURL();
 
     this.board = {
         url: url,
@@ -434,19 +451,49 @@ IvxTileGroup.prototype.prep = function(bg) {
         offx: this.offx,
         offy: this.offy,
     };    
-
+   
     ivxCfg.board = this.board;
 
-    game.load.onFileComplete.add(thisObj.eventPuzzleScaled, thisObj);
+/*
+    game.load.onLoadStart.addOnce(function() {
+        console.log('onLoadStart:');
+    }, thisObj
+    );
+
+    game.load.onLoadComplete.addOnce(function() {
+        console.log('onLoadComplete:');
+         thisObj.eventPuzzleScaled();
+    }, thisObj
+    );
+
+    game.load.onFileStart.addOnce(function() {
+        console.log('onFileStart:');
+    }, thisObj
+    );
+    game.load.onFileError.addOnce(function() {
+        console.log('onFileError:');
+    }, thisObj
+    );
+*/    
+    /*
+    game.load.onFileComplete.addOnce(function() {
+        console.log('onFileComplete');
+        thisObj.eventPuzzleScaled();
+    }, thisObj);
+
+
     game.load.spritesheet('pscaled', url, size, size);
     game.load.start();
-
+    */
+    
+    game.cache.addSpriteSheet('pscaled', null, bmd.canvas, size, size, count, 0, 0);
+    thisObj.eventPuzzleScaled();
+   
     
 }
 IvxTileGroup.prototype.breed = function(cols) {
     var i;
     console.log('IvxTileGroup.breed:');
-    
     for(i=0; i < this.board.count; i++) {
         new IvxTile(this);
     }  
@@ -503,18 +550,17 @@ function createHud(tileGroup) {
       tileGroup.active && tileGroup.active.turnRight();
    });
 
-   /*
-    * FullScreen toggle handled by frame.html code
-    *
+
    btn = new IvxBtn(group, 4,  function() {
-       if(game.scale.isFullScreen) {
-           game.scale.stopFullScreen();
+       if(ivxGame.isFullScreen()) {
+
+           ivxGame.fullScreen(false);
        } else {
-           //game.scale.startFullScreen();
-           ivxGame.localFS();
+
+           ivxGame.fullScreen(true);
        }
    });
-   */
+
 
    group.adjustButtons = function () {
         var i, len, avl, pad, scale, mag, groupwidth, last;
@@ -569,6 +615,7 @@ function createHud(tileGroup) {
 function preload() {
     var path;
 
+    //game.scale.scaleMode = Phaser.ScaleManager.NO_SCALE;
     //game.scale.scaleMode = Phaser.ScaleManager.EXACT_FIT;
     game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
 
@@ -586,6 +633,9 @@ function create2() {
 
     bg = ivxGame.bgCreate();
     bg.bmd.addToWorld();
+    //ivanixcu: debug
+    bg.sprite = game.world.children[0];
+    bg.sprite.visible =false;
     
     tileGroup = new IvxTileGroup(game);
     btnGroup = createHud(tileGroup);
@@ -658,27 +708,45 @@ var IvxGame = function() {
         this.bmdFill(bg.bmd);
         return bg;
     };
-    this.eventFullScreen = function(state) {
-        
-    };
-    this._localFS = function () {
 
+    this.isFullScreen = function() {
+       if(window.ivxMsgObj) {
+           return this._isFS;
+       } else {
+           return game.scale.isFullScreen;
+       }
+    };
+    this._fullScreenLocal = function () {
         game.scale.refresh();
         game.renderDirty = true;
     };
-    this.localFS = function () {
-        console.log('localFS:');
+    this.fullScreenLocal = function(state) {
+        if(!state) {
+            game.scale.stopFullScreen();
+            return;
+        }
+        
+        console.log('fullScreenLocal: true');
         game.scale.startFullScreen();
         game.scale.scaleMode = Phaser.ScaleManager.EXACT_FIT;
         game.scale.fullScreenScaleMode = Phaser.ScaleManager.EXACT_FIT;
         game.scale.setExactFit();
 
-        window.setTimeout(function () { thisObj._localFS(); }, 1000);
+        window.setTimeout(function () { thisObj._fullScreenLocal(); }, 1000);        
     };
+    this.fullScreen = function(state) {
+        if(window.ivxMsgObj) {
+            ivxMsgObj.sendCmd('FullScreen', state)
+        } else {
+            this.fullScreenLocal(state);
+        }
+        
+    };      
     this._initMsgObj = function() {
          ivxMsgObj.ackFullScreen = function(flags) {
              console.log('ackFullScren: flag: ' + flags.flag + '  last: '+flags.last);
-             ivxMsgObj.flags = flags;
+ 
+             thisObj._isFS = flags.flag;
            if(!flags.flag ) {
                console.log('ackFullScreen: first rej');
              return;
@@ -689,7 +757,7 @@ var IvxGame = function() {
            }
            //reload on first fullscreen event, ignore after
            thisObj._fsTO = setTimeout(function() {
-                    location.reload(); 
+                    //location.reload(); 
                 },
                 2000
            );          
@@ -713,7 +781,7 @@ var IvxGame = function() {
     }; 
     thisObj._init = function() {
      //Ivx.consoleHide();
-     Ivx.consoleMin();
+     //Ivx.consoleMin();
       this._initGame();  
     };
     thisObj._init();

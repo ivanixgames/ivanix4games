@@ -1,10 +1,17 @@
 html, body {
   font-family: Arial, Helvetica, sans-serif;
   text-align: center;
-  background: #005555;
+  background: #C0D804;
   margin: 0;
+  overflow: hidden;
 }
-div#canvas1 {
+div#ivxcanvas {
+    width: 100vw;
+    height: 100vh;
+    background: #00ff00;
+}
+div#ivxcanvas canvas {
+
     position: absolute;
     left: 50%;
     top: 50%;
