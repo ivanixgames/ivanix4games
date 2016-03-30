@@ -37,7 +37,15 @@ div#device.desktop-true .orient-port  {
 
 
 }
-object {
+.obj {
+    display: block;       
+    background: #000;
+    border: none;
+    width: 100%;
+    height: 100%; 
+    margin: 0 auto;  
+}
+.objview {
     display: block;       
     background: #000;
     border: none;
@@ -54,13 +62,13 @@ object {
     transform: translate(-50%,-50%);      
 }
 @media screen and (orientation: portrait) {
-    #device.desktop-false div#orient.orient-port object {
+    #device.desktop-false div#orient.orient-port .objview {
         width: 100vw;    
         height: 100vh;     
     }
 }
 @media screen and (orientation: landscape) {
-    #device.desktop-false div#orient.orient-port object {
+    #device.desktop-false div#orient.orient-port .objview {
  
         width: 99vh;        
         height: 99vw;
@@ -70,7 +78,7 @@ object {
         transform: translate(-50%,-50%)rotate(-90deg);        
          
     }
-    div#orient.orient-port #orient-angle.deg270 object {     
+    div#orient.orient-port #orient-angle.deg270 .objview {     
         -webkit-transform: translate(-50%,-50%)rotate(90deg);      
         -moz-transform: translate(-50%,-50%)rotate(90deg);      
         -ms-transform: translate(-50%,-50%)rotate(90deg);      
@@ -79,7 +87,7 @@ object {
 }
 
 @media screen and (orientation: landscape) {
-    #device.desktop-false div#orient.orient-land object {
+    #device.desktop-false div#orient.orient-land .objview {
         width: 99vw;    
         height: 90vh;     
         margin-top: 0vh;
@@ -87,7 +95,7 @@ object {
     } 
 }
 @media screen and (orientation: portrait) {
-    #device.desktop-false div#orient.orient-land object {     
+    #device.desktop-false div#orient.orient-land .objview {     
         width: 99vh;        
         height: 99vw;
         position: absolute;
@@ -104,14 +112,14 @@ div#ivx-fullscreen {
 
     background: #00aaff;
 
-    border-top-left-radius: 0.75vw;
-    border-bottom-left-radius: 0.75vw;
-    border-bottom-right-radius: 0.75vw;
-    height: 2vh;
-    width: 2vh;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    height: 20px;
+    width: 20px;
     position: absolute;    
-    top: 0.5vh;
-    right: 0.5vh;
+    top: 5px; 
+    right: 5px;
     
 }
 div#device.desktop-true.web-firefox div#orient:-moz-full-screen.orient-port  {
