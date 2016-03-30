@@ -31,6 +31,11 @@ div#device.desktop-true .orient-port  {
     top: 50%;
     left: 50%;
     -webkit-transform: translate(-50%,-50%);
+    -moz-transform: translate(-50%,-50%);
+    -ms-transform: translate(-50%,-50%);
+    transform: translate(-50%,-50%);
+
+
 }
 object {
     display: block;       
@@ -44,6 +49,9 @@ object {
     left: 50%;
     top: 50%;
     -webkit-transform: translate(-50%,-50%);      
+    -moz-transform: translate(-50%,-50%);      
+    -ms-transform: translate(-50%,-50%);      
+    transform: translate(-50%,-50%);      
 }
 @media screen and (orientation: portrait) {
     #device.desktop-false div#orient.orient-port object {
@@ -57,10 +65,16 @@ object {
         width: 99vh;        
         height: 99vw;
         -webkit-transform: translate(-50%,-50%)rotate(-90deg);        
+        -moz-transform: translate(-50%,-50%)rotate(-90deg);        
+        -ms-transform: translate(-50%,-50%)rotate(-90deg);        
+        transform: translate(-50%,-50%)rotate(-90deg);        
          
     }
     div#orient.orient-port #orient-angle.deg270 object {     
         -webkit-transform: translate(-50%,-50%)rotate(90deg);      
+        -moz-transform: translate(-50%,-50%)rotate(90deg);      
+        -ms-transform: translate(-50%,-50%)rotate(90deg);      
+        transform: translate(-50%,-50%)rotate(90deg);      
     }    
 }
 
@@ -78,6 +92,9 @@ object {
         height: 99vw;
         position: absolute;
         -webkit-transform: translate(-50%,-50%)rotate(90deg); 
+        -moz-transform: translate(-50%,-50%)rotate(90deg); 
+        -ms-transform: translate(-50%,-50%)rotate(90deg); 
+        transform: translate(-50%,-50%)rotate(90deg); 
 
     }
   
@@ -88,15 +105,19 @@ div#ivx-fullscreen {
     background: #00aaff;
 
     border-top-left-radius: 0.75vw;
-    border-top-right-radius: 0.75vw;
+    border-bottom-left-radius: 0.75vw;
     border-bottom-right-radius: 0.75vw;
-        
     height: 2vh;
     width: 2vh;
-
-
-    position: fixed;    
-    top: 0;
-    right: 0;
+    position: absolute;    
+    top: 0.5vh;
+    right: 0.5vh;
     
+}
+div#device.desktop-true.web-firefox div#orient:-moz-full-screen.orient-port  {
+        -moz-transform: translate(0); 
+}
+div#device.desktop-true.ie11 div#orient:-ms-fullscreen.orient-port  {
+        -ms-transform: translate(0%, -50%); 
+        left: 0%;
 }

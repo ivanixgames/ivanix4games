@@ -367,7 +367,7 @@ IvxTileGroup.prototype.eventPuzzleScaled = function() {
     console.log('IvxTileGroup._eventPuzzledScaled:');
 
     this.breed();
-    this.shuffle();
+    // this.shuffle();
 };
 IvxTileGroup.prototype.prep = function(bg) {
     var thisObj, sample, bmd, url, cols, rows, 
@@ -550,16 +550,17 @@ function createHud(tileGroup) {
       tileGroup.active && tileGroup.active.turnRight();
    });
 
-
-   btn = new IvxBtn(group, 4,  function() {
-       if(ivxGame.isFullScreen()) {
-
-           ivxGame.fullScreen(false);
-       } else {
-
-           ivxGame.fullScreen(true);
-       }
-   });
+   if (!game.device.mobileSafari) {
+	   btn = new IvxBtn(group, 4,  function() {
+	       if(ivxGame.isFullScreen()) {
+	
+	           ivxGame.fullScreen(false);
+	       } else {
+	
+	           ivxGame.fullScreen(true);
+	       }
+	   });
+   }
 
 
    group.adjustButtons = function () {
@@ -656,6 +657,8 @@ function createMsgObj() {
                 ivxMsgObj.sendCmd('Device', ivxCfg.device, function(ack) {
                     console.log('deviceack2: ' +ack);
                     location.reload();
+                    //game.scale.setGameSize(innerWidth, innerHeight);
+                    //create2();
                     
                 });            
             } else {
@@ -747,6 +750,7 @@ var IvxGame = function() {
              console.log('ackFullScren: flag: ' + flags.flag + '  last: '+flags.last);
  
              thisObj._isFS = flags.flag;
+             game.paused = false;
            if(!flags.flag ) {
                console.log('ackFullScreen: first rej');
              return;
@@ -757,7 +761,7 @@ var IvxGame = function() {
            }
            //reload on first fullscreen event, ignore after
            thisObj._fsTO = setTimeout(function() {
-                    //location.reload(); 
+                    location.reload(); 
                 },
                 2000
            );          
@@ -781,7 +785,7 @@ var IvxGame = function() {
     }; 
     thisObj._init = function() {
      //Ivx.consoleHide();
-     //Ivx.consoleMin();
+     Ivx.consoleMin();
       this._initGame();  
     };
     thisObj._init();
