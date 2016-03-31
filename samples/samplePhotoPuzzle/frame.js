@@ -13,7 +13,7 @@
         this._init = function () {
             this._label = window.document.querySelector('#label');
             this._initOrient();
-            Ivx.consoleMin();
+            Ivx.consoleHide();
         }
         this._init();
     };

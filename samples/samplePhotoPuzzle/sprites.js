@@ -1,27 +1,9 @@
-/*
-    canvasWIDTH: window.innerWidth,
-    canvasHEIGHT: window.innerHeight,
-    canvasWIDTH: 600,
-    canvasHEIGHT: 900,       
-*/
-var ivxCfg = {
-   
-    canvasWIDTH: window.innerWidth,
-    canvasHEIGHT: window.innerHeight,  
-    btnSIZE: 100, 
-    btnPAD: 10, 
-    tweenTIME: 300,
-    assets: '../assets/',
-    photo: 'samplePortrait2.jpg'
-};
-
-
-var saveCpu;
-
 
 var IvxBtn = Ivx.extend(Phaser.Button,'PSprite', function(group, idx, onclick) {
-    var x, y, thisObj, bgIdx, activeIdx, spriteIdx, scale, mag;
+    var game, x, y, thisObj, bgIdx, activeIdx, spriteIdx, scale, mag;
     x = 20+ (120 * idx);
+    game = group.game;
+
     bgIdx = 0;
     activeIdx = 1;
     spriteIdx = idx + 2;
@@ -40,15 +22,11 @@ var IvxBtn = Ivx.extend(Phaser.Button,'PSprite', function(group, idx, onclick) {
         thisObj.eventInputUp(idx);
     });
     
-    //game.add.existing(this);
-    
-
     this.active = new Phaser.Sprite(game, 0, 0, 'ui', activeIdx);
     this.icon = new Phaser.Sprite(game, 0, 0, 'ui', spriteIdx);
     this.addChild(this.active);
     this.addChild(this.icon);
     this.active.visible = false;
-    // this.scale.setMagnitude(0.75);
 
 });
 IvxBtn.prototype.eventClicked = function(idx) {
@@ -84,14 +62,9 @@ var IvxTile = Ivx.extend(Phaser.Sprite,'PSprite', function(group) {
 
     this.x = board.offx + ((midpoint + col * board.size ) );
     this.y = board.offy + ((midpoint + row * board.size ) );
- 
 
     this.anchor.setTo(0.5);
-/*
-    mag  = this.scale.getMagnitude();
 
-    this.scale.setMagnitude( mag * board.scale);
-*/
     this.inputEnabled = true;
     this.input.enableDrag();
     
@@ -106,6 +79,7 @@ var IvxTile = Ivx.extend(Phaser.Sprite,'PSprite', function(group) {
     
     group.add(this);
     group.cellArr.push(this);
+    this.visible  = false;
     this.orig = {
         mag: mag,
         txt: this.texture,
@@ -358,23 +332,19 @@ IvxTileGroup.prototype.select = function(tile, onDragStart) {
           this.active = tile;         
       }
 };
-/*
-
-
-
-*/
 IvxTileGroup.prototype.eventPuzzleScaled = function() {
     console.log('IvxTileGroup._eventPuzzledScaled:');
 
     this.breed();
-    // this.shuffle();
+    this.shuffle();
 };
 IvxTileGroup.prototype.prep = function(bg) {
-    var thisObj, sample, bmd, url, cols, rows, 
+    var game, thisObj, sample, bmd, url, cols, rows, 
         size, sizex, sizey,
-        count, scale, offx, offy,  mag, h;
+        count, scale, offx, offy,  mag, h, scale2;
 
     thisObj = this;
+    game = this.game;
 
     cols = 4;
         
@@ -407,10 +377,12 @@ IvxTileGroup.prototype.prep = function(bg) {
     if (game.scale.aspectRatio < 1 ) {
         size = (game.width / cols)|0;
         rows =  (((sample.height * scale)/size))|0;
+        scale2 = ((100 *(rows * size) / game.height)|0) / 100;
     } else {
         rows = cols;
         size = (game.height / rows)|0;
         cols =  (((sample.height * scale)/size))|0;
+        scale2 = 1;
     }
     
 
@@ -418,7 +390,7 @@ IvxTileGroup.prototype.prep = function(bg) {
     
     mag = sample.scale.getMagnitude();
     sample.mag = mag;
-    sample.scale.setMagnitude(mag * scale);
+    sample.scale.setMagnitude(scale2 * mag * scale);
 
     count = cols * rows; 
 
@@ -504,6 +476,7 @@ IvxTileGroup.prototype._shuffle = function() {
     var len = this.cellArr.length;
     for(var i=0; i < len; i++) {
         this.cellArr[i].shuffle();
+        this.cellArr[i].visible = true;
     }  
 };
 IvxTileGroup.prototype.shuffle = function() {
@@ -530,265 +503,3 @@ IvxTileGroup.prototype.completed = function() {
 IvxTileGroup.prototype.animateCorrect = function() {
     console.log('animateCorrect!');  
 };
-    
-
-function createHud(tileGroup) {
-   var btn, group;
-
-   group = game.add.group();
-   
-   btn = new IvxBtn(group, 0, function() {
-      tileGroup.active && tileGroup.active.turnLeft();
-   });
-   btn = new IvxBtn(group, 1,  function() {
-       tileGroup.active && tileGroup.active.flipV();
-   });
-   btn = new IvxBtn(group, 2,  function() {
-       tileGroup.active && tileGroup.active.flipH();
-   });
-   btn = new IvxBtn(group, 3,  function() {
-      tileGroup.active && tileGroup.active.turnRight();
-   });
-
-   if (!game.device.mobileSafari) {
-	   btn = new IvxBtn(group, 4,  function() {
-	       if(ivxGame.isFullScreen()) {
-	
-	           ivxGame.fullScreen(false);
-	       } else {
-	
-	           ivxGame.fullScreen(true);
-	       }
-	   });
-   }
-
-
-   group.adjustButtons = function () {
-        var i, len, avl, pad, scale, mag, groupwidth, last;
-
-       len = this.children.length;
-       groupwidth = ((ivxCfg.btnPAD + ivxCfg.btnSIZE) * len)
-       
-       scale = 1;
-       if (ivxCfg.canvasWIDTH < groupwidth ) {
-          scale = ivxCfg.canvasWIDTH / groupwidth;
-       }
-
-        console.log('adjustButtons: scale: ' + scale);
-
-        avl = Math.floor (ivxCfg.canvasWIDTH - (scale * ivxCfg.btnSIZE * len));
-        pad = Math.floor(  (avl / (len + 1)) );
-        console.log('adjustButtons: avl: ' + avl + '  pad: '  + pad);
-
-        for(i=0; i < len; i++) {
-            this.children[i].x =  (i * (ivxCfg.btnSIZE + pad) * scale);
-            mag = this.children[i].scale.getMagnitude();
-            this.children[i].scale.setMagnitude(mag * scale);
-        };
-        group.x = (ivxCfg.canvasWIDTH - group.width)/2|0;
-
-   };
-   group.adjustButtons();
-
-   tileGroup.onActive = function(tile) {
-       var bottom;
-       console.log('tileGroup.onActive: ' + tile);
-       if (tile && tile.y) {
-        if (tile.y < ivxCfg.canvasHEIGHT / 2) {
-            bottom = ivxCfg.canvasHEIGHT - ivxCfg.btnSIZE - ivxCfg.btnPAD;
-            group.y  = bottom;
-        } else {
-            group.y  = ivxCfg.btnPAD;
-        }
-       }
-
-       if (tile) {
-           group.visible = true;
-       } else {
-           group.visible = false;
-       }
-   };
-
-   group.visible = false;
-
-   return group;
-};
-function preload() {
-    var path;
-
-    //game.scale.scaleMode = Phaser.ScaleManager.NO_SCALE;
-    //game.scale.scaleMode = Phaser.ScaleManager.EXACT_FIT;
-    game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
-
-    game.load.spritesheet('ui', '../assets/ui.png', ivxCfg.btnSIZE, ivxCfg.btnSIZE); 
-
-    path = ivxCfg.assets + ivxCfg.photo;
-
-    game.load.image('puzzle', path);
-   
-};
- 
-function create2() {
-    
-    var bg, tileGroup, btnGroup;
-
-    bg = ivxGame.bgCreate();
-    bg.bmd.addToWorld();
-    //ivanixcu: debug
-    bg.sprite = game.world.children[0];
-    bg.sprite.visible =false;
-    
-    tileGroup = new IvxTileGroup(game);
-    btnGroup = createHud(tileGroup);
-
-    tileGroup.prep(bg);
-
-    ivxCfg.tileGroup = tileGroup;    
-    ivxCfg.btnGroup = btnGroup;
-
-    game.stage.backgroundColor = "#000055";
-};
-function createMsgObj() {
-    ivxCfg.device = ivxMsgObj.deviceInfo(game);
-    ivxMsgObj.sendCmd('Orient','port', function(ack) {    
-        ivxMsgObj.sendCmd('Device', '?', function(ack) {
-            console.log('deviceack1: ' +ack); 
-            if(!ack) {
-                ivxMsgObj.sendCmd('Device', ivxCfg.device, function(ack) {
-                    console.log('deviceack2: ' +ack);
-                    location.reload();
-                    //game.scale.setGameSize(innerWidth, innerHeight);
-                    //create2();
-                    
-                });            
-            } else {
-                create2();
-            }
-        });
-    });
-};
-function create() {
-    saveCpu = game.plugins.add(Phaser.Plugin.SaveCPU);
-    if(window.ivxMsgObj) {
-        createMsgObj();
-    } else {
-        create2();
-    }
-}
-var game;
-
-var IvxGame = function() {
-    var thisObj;
-    thisObj = this;
-
-
-	this.bmdFill = function(bmd) {
-	    var x, y, a, sprite;
-	
-	    sprite = game.add.sprite(0,0,'ui', 0);
-	    sprite.anchor.setTo(0.5);
-	
-	    game.world.removeChild(sprite);
-	    sprite.visible=false;
-	    sprite.scale.setMagnitude(0.7);
-	
-	    bmd.ctx.fillStyle="#ffffff";
-	    bmd.ctx.strokeStyle="#aaaaff";
-		bmd.clear();
-		bmd.fill();
-	
-	    for(x = -sprite.width; x < bmd.width + sprite.width; x += sprite.width/2) {
-	    for(y = -sprite.height; y < bmd.height + sprite.height; y += sprite.width/2) {
-	            var a = (x % 360);
-	            sprite.angle = a;
-	            bmd.draw(sprite, x, y);
-	    }
-	    }
-	};
-    this.bgCreate = function() {
-        var bg = {};
-        bg.bmd = game.add.bitmapData(game.width, game.height);
-        this.bmdFill(bg.bmd);
-        return bg;
-    };
-
-    this.isFullScreen = function() {
-       if(window.ivxMsgObj) {
-           return this._isFS;
-       } else {
-           return game.scale.isFullScreen;
-       }
-    };
-    this._fullScreenLocal = function () {
-        game.scale.refresh();
-        game.renderDirty = true;
-    };
-    this.fullScreenLocal = function(state) {
-        if(!state) {
-            game.scale.stopFullScreen();
-            return;
-        }
-        
-        console.log('fullScreenLocal: true');
-        game.scale.startFullScreen();
-        game.scale.scaleMode = Phaser.ScaleManager.EXACT_FIT;
-        game.scale.fullScreenScaleMode = Phaser.ScaleManager.EXACT_FIT;
-        game.scale.setExactFit();
-
-        window.setTimeout(function () { thisObj._fullScreenLocal(); }, 1000);        
-    };
-    this.fullScreen = function(state) {
-        if(window.ivxMsgObj) {
-            ivxMsgObj.sendCmd('FullScreen', state)
-        } else {
-            this.fullScreenLocal(state);
-        }
-        
-    };      
-    this._initMsgObj = function() {
-         ivxMsgObj.ackFullScreen = function(flags) {
-             console.log('ackFullScren: flag: ' + flags.flag + '  last: '+flags.last);
- 
-             thisObj._isFS = flags.flag;
-             game.paused = false;
-           if(!flags.flag ) {
-               console.log('ackFullScreen: first rej');
-             return;
-           }
-           if(typeof(flags.last) !=="undefined") {
-               console.log('ackFullScreen: second rej');
-             return;
-           }
-           //reload on first fullscreen event, ignore after
-           thisObj._fsTO = setTimeout(function() {
-                    location.reload(); 
-                },
-                2000
-           );          
-         };
-    }
-    this._initGame = function() {
-            // Phaser.AUTO, 
-            //'ivxcanvas', 
-        game = new Phaser.Game(
-            ivxCfg.canvasWIDTH,
-            ivxCfg.canvasHEIGHT,
-            Phaser.AUTO, 
-            'ivxcanvas', 
-            { preload: preload, create: create }, 
-            false
-            );
-            
-        if(window.ivxMsgObj) {
-            this._initMsgObj();
-        }
-    }; 
-    thisObj._init = function() {
-     //Ivx.consoleHide();
-     Ivx.consoleMin();
-      this._initGame();  
-    };
-    thisObj._init();
-  
-};
-var ivxGame = new IvxGame();

@@ -39,6 +39,9 @@ div.ivxconsole p {
     bottom: -5em;
     border-radius: 1em;
 }
+#ivxconsole.hide {
+    display: none;
+}
 #ivxconsole .ivxtoggle {
     border: 2px solid #ffffff;
     background: #00ffff;
