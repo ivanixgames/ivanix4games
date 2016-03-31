@@ -23,6 +23,10 @@ IvxScenes.Main = function (ivxGame) {
 	    ivxCfg.btnGroup = btnGroup;
 	
 	    game.stage.backgroundColor = "#000055";
+
+        if (ivxGame.mode === 'demo') {
+            ivxGame.createDemoHud();
+        }
 	};
 	this._createMsgObj = function () {
 	    ivxCfg.device = ivxMsgObj.deviceInfo(game);
@@ -34,11 +38,11 @@ IvxScenes.Main = function (ivxGame) {
 	                    console.log('deviceack2: ' +ack);
 	                    location.reload();
 	                    //game.scale.setGameSize(innerWidth, innerHeight);
-	                    //this._create2();
+	                    //thisObj._create2();
 	                    
 	                });            
 	            } else {
-	                this._create2();
+	                thisObj._create2();
 	            }
 	        });
 	    });

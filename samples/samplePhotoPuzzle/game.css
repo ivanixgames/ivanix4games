@@ -21,3 +21,18 @@ div#ivxcanvas canvas {
     -ms-transform: translate(-50%,-50%);
     transform: translate(-50%,-50%);
 }
+div#ivxdemo {
+
+    background: rgba(255,255,255,0.6);
+    color: #000000;
+    border-radius: 5vw;
+
+    font-size: 5vw;
+    width: 80vw;
+
+    position: fixed;
+    top:  50%;
+    left: 50%;
+    -webkit-transform: translate(-50%,-50%);
+
+}

@@ -3,6 +3,26 @@ var IvxGame = function() {
     var game, thisObj;
     thisObj = this;
 
+    Object.defineProperty(this, 'mode', {
+
+        set: function(val) {
+            localStorage.setItem('mode', val);
+        },
+        get: function() {
+            var val;
+            val = localStorage.getItem('mode');
+            if(!val) {
+                val = 'demo';
+            }
+            return val;
+        }
+    });
+
+	this.createDemoHud = function () {
+        var e;
+        e = document.querySelector('#ivxdemo')
+
+    }
 	this.createHud = function (tileGroup) {
 	   var btn, group;
 	
@@ -14,11 +34,9 @@ var IvxGame = function() {
 	   btn = new IvxBtn(group, 1,  function() {
 	       tileGroup.active && tileGroup.active.flipV();
 	   });
-	   /*
 	   btn = new IvxBtn(group, 2,  function() {
 	       tileGroup.active && tileGroup.active.flipH();
 	   });
-	   */
 	   btn = new IvxBtn(group, 3,  function() {
 	      tileGroup.active && tileGroup.active.turnRight();
 	   });
@@ -207,10 +225,7 @@ var IvxGame = function() {
         }
     }; 
     this._initMode = function() {
-        var mode;
-        mode = localStorage.getItem('mode');
-        if(!mode) {
-        }
+        
     }
     thisObj._init = function() {
       Ivx.consoleHide();
