@@ -1,16 +1,20 @@
 html, body {
   font-family: Arial, Helvetica, sans-serif;
   text-align: center;
+  /*
   background: #C0D804;
+  */
   margin: 0;
   overflow: hidden;
 }
-div#ivxcanvas {
+div#ivx-canvas {
     width: 100vw;
     height: 100vh;
-    background: #00ff00;
+    /*
+    background: #000000;
+    */
 }
-div#ivxcanvas canvas {
+div#ivx-canvas canvas {
 
     position: absolute;
     left: 50%;
@@ -21,12 +25,14 @@ div#ivxcanvas canvas {
     -ms-transform: translate(-50%,-50%);
     transform: translate(-50%,-50%);
 }
-div#ivxdemo {
-
+div.ivx-hud {
+    display: none;
+    /*
     background: rgba(255,255,255,0.6);
-    color: #000000;
+    */
+    color: #ffffff;
     border-radius: 5vw;
-
+    text-shadow: #000000 5px 5px;
     font-size: 5vw;
     width: 80vw;
 
@@ -35,4 +41,14 @@ div#ivxdemo {
     left: 50%;
     -webkit-transform: translate(-50%,-50%);
 
+}
+div.ivx-hud a {
+    background: #00ff00;
+    padding: 10px;
+    border-radius: 15px;
+    color: #000000;
+    text-shadow: 0 0 0;
+    text-decoration: none;
+    cursor: pointer;
+    
 }

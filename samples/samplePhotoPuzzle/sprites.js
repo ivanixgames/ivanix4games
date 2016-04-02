@@ -71,15 +71,17 @@ var IvxTile = Ivx.extend(Phaser.Sprite,'PSprite', function(group) {
     thisObj = this;
     this.events.onDragStart.add(function(sprite, pointer) {
 
-        thisObj.onDragStart(sprite, pointer); 
+        thisObj.eventDragStart(sprite, pointer); 
     });
     this.events.onDragStop.add(function(sprite, pointer) {
-        thisObj.onDragStop(sprite, pointer); 
+        thisObj.eventDragStop(sprite, pointer); 
     }); 
     
     group.add(this);
     group.cellArr.push(this);
-    this.visible  = false;
+
+    //this.visible  = false;
+
     this.orig = {
         mag: mag,
         txt: this.texture,
@@ -124,7 +126,7 @@ IvxTile.prototype.adjustTint = function () {
     }
 };
 
-IvxTile.prototype.onCorrect = function (animate) {
+IvxTile.prototype.checkCorrect = function (animate) {
     var correct;
 
     correct = this.isCorrect();
@@ -132,12 +134,10 @@ IvxTile.prototype.onCorrect = function (animate) {
        this.inputEnabled = false;
        if (this.isActive()) {
         this.parent.active = null;
-        this.parent.onActive(false);
+        this.parent.eventActive(false);
        }
     }
     this.adjustTint();
-    correct && animate && this.parent.animateCorrect();
-    
     return correct;
 };
 
@@ -189,17 +189,17 @@ IvxTile.prototype.calcIdx = function() {
     }
     return this.idx;
 };
-IvxTile.prototype.onDragStart = function (sprite, pointer) {
+IvxTile.prototype.eventDragStart = function (sprite, pointer) {
 
     this.origActive =  this.parent.active;
-    this.parent.onActive(false);
+    this.parent.eventActive(false);
     
     this.parent.active = this;
 
     this.last = { x: this.x, y: this.y, type: this.position.type};
     this.bringToTop();
 };
-IvxTile.prototype.onDragStop = function (sprite, pointer) {
+IvxTile.prototype.eventDragStop = function (sprite, pointer) {
 
     var idx, tile;
 
@@ -210,22 +210,22 @@ IvxTile.prototype.onDragStop = function (sprite, pointer) {
     this.y = this.last.y;
     if (this !== tile) {
         this.parent.active = tile;
-        this.onCorrect();
+        this.checkCorrect();
     } else {
         if (this.origActive === this) {
             this.parent.active = null;
         }
     }
-    this.parent.onActive(this.parent.active);
+    this.parent.eventActive(this.parent.active);
     
-    tile.onCorrect(true) && this.parent.completed();
+    tile.checkCorrect(true) && this.parent.checkComplete();
     
 };
 IvxTile.prototype._turn = function () {
 
     this.parent.tween = null;
-    this.parent.onActive(true);
-    this.onCorrect(true) && this.parent.completed();
+    this.parent.eventActive(true);
+    this.checkCorrect(true) && this.parent.checkComplete();
     
 };
 IvxTile.prototype.turnRight = function () {
@@ -235,7 +235,7 @@ IvxTile.prototype.turnRight = function () {
     angle = this.angle + 90;
 
     parent = this.parent
-    parent.onActive(false);
+    parent.eventActive(false);
     parent.tween =this.game.add.tween(this);
     parent.tween.to({angle: angle}, ivxCfg.tweenTIME , Phaser.Easing.Linear.None, true);
     parent.tween.onComplete.addOnce(function() {thisObj._turn();}, this);
@@ -247,7 +247,7 @@ IvxTile.prototype.turnLeft = function () {
     angle = this.angle - 90;
 
     parent = this.parent
-    parent.onActive(false);
+    parent.eventActive(false);
     parent.tween =this.game.add.tween(this);
     parent.tween.to({angle: angle}, ivxCfg.tweenTIME , Phaser.Easing.Linear.None, true);
     parent.tween.onComplete.addOnce(function() {thisObj._turn();}, this);
@@ -260,7 +260,7 @@ IvxTile.prototype.flipH = function () {
 
     thisObj = this;
     parent = this.parent
-    parent.onActive(false);
+    parent.eventActive(false);
     parent.tween =this.game.add.tween(this.scale);
     parent.tween.to({x: val}, ivxCfg.tweenTIME , Phaser.Easing.Linear.None, true);
     parent.tween.onComplete.addOnce(function() {thisObj._turn();}, this);
@@ -273,7 +273,7 @@ IvxTile.prototype.flipV = function () {
 
     thisObj = this;
     parent = this.parent
-    parent.onActive(false);
+    parent.eventActive(false);
     parent.tween =this.game.add.tween(this.scale);
     parent.tween.to({y: val}, ivxCfg.tweenTIME , Phaser.Easing.Linear.None, true);
     parent.tween.onComplete.addOnce(function() {thisObj._turn();}, this);
@@ -290,7 +290,7 @@ IvxTile.prototype.shuffle = function () {
     this.scale.y *= Math.floor(Math.random()  * 2)||-1;
 
     this.angle  = (Math.floor(Math.random() * 4) * 90);
-    this.onCorrect();
+    this.checkCorrect();
 };
 var IvxTileGroup = Ivx.extend(Phaser.Group,'PGroup', function(game) {
     Phaser.Group.call(this, game);
@@ -314,14 +314,16 @@ var IvxTileGroup = Ivx.extend(Phaser.Group,'PGroup', function(game) {
             return activeTile;
         }
     });
-    this._shuffleDELAY = 1000;
+    this._shuffleDELAY = 3000;
     this.cellArr = [];
 });
-IvxTileGroup.prototype.onActive = function(active) { 
-    console.log('IvxTileGroup.onActive: **todo: override **');
+IvxTileGroup.prototype.eventCompleted = function() { 
+    console.log('IvxTileGroup.eventCompleted: **todo: override **');
 };
-    
-IvxTileGroup.prototype.select = function(tile, onDragStart) {
+IvxTileGroup.prototype.eventActive = function(active) { 
+    console.log('IvxTileGroup.eventActive: **todo: override **');
+};
+IvxTileGroup.prototype.select = function(tile, eventDragStart) {
       var current;
       current = this.active;
 
@@ -331,12 +333,6 @@ IvxTileGroup.prototype.select = function(tile, onDragStart) {
       if (current !== tile) {
           this.active = tile;         
       }
-};
-IvxTileGroup.prototype.eventPuzzleScaled = function() {
-    console.log('IvxTileGroup._eventPuzzledScaled:');
-
-    this.breed();
-    this.shuffle();
 };
 IvxTileGroup.prototype.prep = function(bg) {
     var game, thisObj, sample, bmd, url, cols, rows, 
@@ -426,43 +422,12 @@ IvxTileGroup.prototype.prep = function(bg) {
    
     ivxCfg.board = this.board;
 
-/*
-    game.load.onLoadStart.addOnce(function() {
-        console.log('onLoadStart:');
-    }, thisObj
-    );
-
-    game.load.onLoadComplete.addOnce(function() {
-        console.log('onLoadComplete:');
-         thisObj.eventPuzzleScaled();
-    }, thisObj
-    );
-
-    game.load.onFileStart.addOnce(function() {
-        console.log('onFileStart:');
-    }, thisObj
-    );
-    game.load.onFileError.addOnce(function() {
-        console.log('onFileError:');
-    }, thisObj
-    );
-*/    
-    /*
-    game.load.onFileComplete.addOnce(function() {
-        console.log('onFileComplete');
-        thisObj.eventPuzzleScaled();
-    }, thisObj);
-
-
-    game.load.spritesheet('pscaled', url, size, size);
-    game.load.start();
-    */
     
     game.cache.addSpriteSheet('pscaled', null, bmd.canvas, size, size, count, 0, 0);
-    thisObj.eventPuzzleScaled();
-   
-    
-}
+
+    this.breed();
+    this.shuffle();
+};
 IvxTileGroup.prototype.breed = function(cols) {
     var i;
     console.log('IvxTileGroup.breed:');
@@ -488,7 +453,7 @@ IvxTileGroup.prototype.shuffle = function() {
         thisObj._shuffleDELAY
     );
 };
-IvxTileGroup.prototype.completed = function() {
+IvxTileGroup.prototype.checkComplete = function() {
     var len, tile;
     len = this.cellArr.length;
     for (var i = 0; i < len; i++) {
@@ -496,10 +461,8 @@ IvxTileGroup.prototype.completed = function() {
             return false;
         }
     }  
-    this.onActive(null);
-    console.log('puzzle complete!');
+    this.eventActive(null);
+    console.log('IvxTileGroup.checkComplete: true');
+    this.eventCompleted();
     return true;
-};
-IvxTileGroup.prototype.animateCorrect = function() {
-    console.log('animateCorrect!');  
 };

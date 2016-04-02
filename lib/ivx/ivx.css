@@ -6,7 +6,8 @@ html, body {
   margin: 0 auto;
   padding: 0;
 }
-#ivxconsole {
+#ivx-console {
+    display: none;
     background: rgba(0,0,200,0.5);
     
     width: 100%;
@@ -16,7 +17,7 @@ html, body {
     bottom: 0;
     left: 1em;
 }
-div.ivxconsole {
+div.ivx-console {
     overflow: auto;
     height: 90%;
     width: 110%;
@@ -28,21 +29,25 @@ div.ivxconsole {
     border-top-right-radius: 1em;
 
 }
-div.ivxconsole p {
+div.ivx-console p {
     color: #cc0000;
     padding: 0;
     margin: 0;
 }
-#ivxconsole.min {
+#ivx-console.show {
+    display: block;
+}
+#ivx-console.min {
+    display: block;
     border: 0px solid #00ffff;
     left: 100vw;
     bottom: -5em;
     border-radius: 1em;
 }
-#ivxconsole.hide {
+#ivx-console.hide {
     display: none;
 }
-#ivxconsole .ivxtoggle {
+#ivx-console .ivx-toggle {
     border: 2px solid #ffffff;
     background: #00ffff;
     font-size: 70%;

@@ -129,3 +129,33 @@ div#device.desktop-true.ie11 div#orient:-ms-fullscreen.orient-port  {
         -ms-transform: translate(0%, -50%); 
         left: 0%;
 }
+.ivx-hud {
+    display: none;
+
+    background: rgba(255,255,255,0.6);
+    color: #ffffff;
+    border-radius: 5vw;
+    text-shadow: #000000 5px 5px;
+    font-size: 5vw;
+    width: 80vw;
+
+    position: fixed;
+    top:  50%;
+    left: 50%;
+    -webkit-transform: translate(-50%,-50%);
+
+}
+.ivx-hud a {
+    background: #00ff00;
+    padding: 10px;
+    border-radius: 15px;
+    
+    
+    color: #000000;
+    text-shadow: 0 0 0;
+    text-decoration: none;
+    cursor: pointer;
+
+    margin-left: 4vw;
+    margin-right: 4vw;
+}
