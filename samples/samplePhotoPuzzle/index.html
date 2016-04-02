@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+
+	<meta name="viewport" content="user-scalable=no,  initial-scale=1,  maximum-scale=1,  width=device-width,   minimal-ui" />
+
+    <title>Photo Puzzle</title>
+    <link rel="stylesheet" href="frame.css" type="text/css" charset="utf-8">
+
+</head>
+<body id="body" ivx-msg-parent="true" onload="" >
+    <div id="device">
+        
+    <div id="orient">
+        <div id="orient-angle" >
+            <div id="objview" class="objview">
+                <!--
+                <object class="obj" data="game.html" ></object>
+                <iframe class="obj"  src="game.html" allowfullscreen="true" ></iframe>
+                -->
+                <object class="obj" data="game.html" ></object>
+
+                <div id="ivx-ask-fullscreen" class="ivx-hud">
+                    <h2>Play in full screen?</h3>
+                    <br>
+                    <a ivx-val="yes">Yes</a>
+                    <a ivx-val="no">No</a>                    
+                    <br>
+                    <br>
+                </div>                      
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <div id="ivx-console"></div>
+    
+    <link rel="stylesheet" href="../../lib/ivx/ivx.css" type="text/css" charset="utf-8">
+    <script src="../../lib/ivx/ivx.js"></script>    
+    <script src="../../lib/ivx/msgobj.js"></script>
+    <script src="frame.js"></script>
+</body>
+</html>
