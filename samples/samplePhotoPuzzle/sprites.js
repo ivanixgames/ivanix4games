@@ -66,7 +66,7 @@ var IvxTile = Ivx.extend(Phaser.Sprite,'PSprite', function(group) {
     this.anchor.setTo(0.5);
 
     this.inputEnabled = true;
-    this.input.enableDrag();
+   // this.input.enableDrag();
     
     thisObj = this;
     this.events.onDragStart.add(function(sprite, pointer) {
@@ -97,6 +97,10 @@ var IvxTile = Ivx.extend(Phaser.Sprite,'PSprite', function(group) {
 IvxTile.prototype.isCorrect = function () {
     var o, correct;
     o = this.orig;
+
+    if(this.parent._preview) {
+        return false;
+    }
 
     if (this.scale.x < 0 && this.scale.y < 0) {
         this.scale.x *= -1;
@@ -191,6 +195,10 @@ IvxTile.prototype.calcIdx = function() {
 };
 IvxTile.prototype.eventDragStart = function (sprite, pointer) {
 
+    if(this.parent._preview) {
+        return false;
+    }
+
     this.origActive =  this.parent.active;
     this.parent.eventActive(false);
     
@@ -202,6 +210,9 @@ IvxTile.prototype.eventDragStart = function (sprite, pointer) {
 IvxTile.prototype.eventDragStop = function (sprite, pointer) {
 
     var idx, tile;
+    if(this.parent._preview) {
+        return false;
+    }
 
     idx = this.calcIdx();
    
@@ -290,6 +301,7 @@ IvxTile.prototype.shuffle = function () {
     this.scale.y *= Math.floor(Math.random()  * 2)||-1;
 
     this.angle  = (Math.floor(Math.random() * 4) * 90);
+    this.input.enableDrag();
     this.checkCorrect();
 };
 var IvxTileGroup = Ivx.extend(Phaser.Group,'PGroup', function(game) {
@@ -316,6 +328,7 @@ var IvxTileGroup = Ivx.extend(Phaser.Group,'PGroup', function(game) {
     });
     this._shuffleDELAY = 3000;
     this.cellArr = [];
+    this._preview = true;
 });
 IvxTileGroup.prototype.eventCompleted = function() { 
     console.log('IvxTileGroup.eventCompleted: **todo: override **');
@@ -430,6 +443,7 @@ IvxTileGroup.prototype.prep = function(bg) {
 };
 IvxTileGroup.prototype.breed = function(cols) {
     var i;
+    this._preview = true;
     console.log('IvxTileGroup.breed:');
     for(i=0; i < this.board.count; i++) {
         new IvxTile(this);
@@ -443,6 +457,7 @@ IvxTileGroup.prototype._shuffle = function() {
         this.cellArr[i].shuffle();
         this.cellArr[i].visible = true;
     }  
+    this._preview = false;
 };
 IvxTileGroup.prototype.shuffle = function() {
     var thisObj = this;
