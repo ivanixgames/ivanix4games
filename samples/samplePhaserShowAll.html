@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Phaser Test Show All</title>
+
+	<meta name="viewport" content="user-scalable=no,  initial-scale=1,  maximum-scale=1,  width=device-width" />
+    <script src="http://cdn.jsdelivr.net/phaser/2.4.4/phaser.min.js"></script>
+    <script src="../lib/phaser/plugins/SaveCPU.js"></script>
+</head>
+
+<body onload="" >
+ 
+<div id="canvasholder"></div>
+
+<style>
+html, body {
+    margin: 0 auto;
+    padding: 0;
+    background: #0000ff;
+
+}
+canvas {
+    border: 1px solid #00ff00;
+}
+#canvasholder {
+    width: 99vw;
+    height: 99vh;
+    margin: 0 auto;
+}
+</style>
+<script>
+    var game;
+    var saveCpu;
+
+    function create() {
+	    saveCpu = game.plugins.add(Phaser.Plugin.SaveCPU);
+        game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+
+    }
+    game = new Phaser.Game(1920, 1280, Phaser.AUTO, 'canvasholder', {create: create });
+</script>
+</body>
+</html>
