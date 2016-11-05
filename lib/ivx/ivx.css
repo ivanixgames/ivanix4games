@@ -56,8 +56,11 @@ div.ivx-console p {
     border-top-left-radius: 0.75vw;
     border-top-right-radius: 0.75vw;
     border-bottom-left-radius: 0.75vw;
-     
+    
+    width: 15px;
     width: 2vw;
+    
+    height: 15px;
     height: 2vw;
 
     position:relative;
