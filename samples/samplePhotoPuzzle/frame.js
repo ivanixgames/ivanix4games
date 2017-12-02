@@ -1,6 +1,7 @@
 
 
 (function (window, ivxMsgParent) {
+    console.log('frame.js: ivxMsgParent: ' + ivxMsgParent);
     var elementFS, elementAspect, ivxHud;
     
     ivxHud= {};
