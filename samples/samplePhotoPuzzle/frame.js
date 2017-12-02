@@ -40,4 +40,7 @@
     };
     window.IvxFrame = IvxFrame;
 } (window, ivxMsgParent));
-var ivx = new IvxFrame();
+
+window.addEventListener('DOMContentLoaded', function() {
+    var ivx = new IvxFrame();
+});
