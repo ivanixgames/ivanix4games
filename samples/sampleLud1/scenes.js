@@ -98,9 +98,10 @@ IvxScenes.Invite = function (ivxGame) {
 			thisObj.eventStory();
         });
         //todo: remove after dev!
+        /*
         hud.style.display = "none";
         game.state.start('Main');
-        
+        */
 	};
 	this.preload = function () {
         console.log('IvxScenes.Invite.preload:');
