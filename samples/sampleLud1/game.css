@@ -1,0 +1,67 @@
+html, body {
+  font-family: Arial, Helvetica, sans-serif;
+  text-align: center;
+  /*
+  background: #C0D804;
+  */
+  margin: 0;
+  overflow: hidden;
+}
+div#ivx-canvas {
+    width: 100vw;
+    height: 100vh;
+    /*
+    background: #000000;
+    */
+}
+div#ivx-canvas canvas {
+
+    position: absolute;
+    left: 50%;
+    top: 50%;
+
+    -webkit-transform: translate(-50%,-50%);
+    -moz-transform: translate(-50%,-50%);
+    -ms-transform: translate(-50%,-50%);
+    transform: translate(-50%,-50%);
+}
+div.ivx-hud {
+    display: none;
+    /*
+    background: rgba(255,255,255,0.6);
+    */
+    color: #ffffff;
+    border-radius: 5vw;
+    text-shadow: #000000 5px 5px;
+    font-size: 5vw;
+    width: 80vw;
+
+    position: fixed;
+    top:  50%;
+    left: 50%;
+    -webkit-transform: translate(-50%,-50%);
+
+}
+div.ivx-hud a {
+    background: #00aaff;
+    padding: 10px;
+    border-radius: 15px;
+    color: #ffffff;
+    text-shadow: 0 0 0;
+    text-decoration: none;
+    cursor: pointer;
+    
+}
+div#ivx-hud-story {
+
+    font-size: 1.5em;
+    text-align: justify;
+    background:  rgba(0,90,0,0.85);
+    border-radius: 0;
+    padding: 2em;
+    padding-top: 0;
+    text-shadow: none;
+    height: 80vh;
+    width: 70vw;
+    overflow: auto;    
+}

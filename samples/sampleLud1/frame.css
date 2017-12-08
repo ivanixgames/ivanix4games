@@ -1,0 +1,161 @@
+html, body {
+  font-family: Arial, Helvetica, sans-serif;
+  text-align: center;
+  background: #005555;
+  color: #00aaff;
+  margin: 0 auto;
+  padding: 0;
+}
+
+
+div#device, div#orient {
+    margin: 0 auto;
+}
+div#orient-angle {
+    width: 100%;
+    height: 100%;
+    margin: 0 auto;
+    padding: 0;
+}
+div#device.desktop-true .orient-land  {
+    width: 120vh;
+    height: 90vh;
+    position: relative;
+    top: 2vh;
+}
+div#device.desktop-true .orient-port  {
+    width: 60vh;
+    height: 90vh;
+    position: absolute;
+
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%,-50%);
+    -moz-transform: translate(-50%,-50%);
+    -ms-transform: translate(-50%,-50%);
+    transform: translate(-50%,-50%);
+
+
+}
+.obj {
+    display: block;       
+    background: #000;
+    border: none;
+    width: 100%;
+    height: 100%; 
+    margin: 0 auto;  
+}
+.objview {
+    display: block;       
+    background: #000;
+    border: none;
+    width: 100%;
+    height: 100%; 
+    margin: 0 auto;  
+    
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    -webkit-transform: translate(-50%,-50%);      
+    -moz-transform: translate(-50%,-50%);      
+    -ms-transform: translate(-50%,-50%);      
+    transform: translate(-50%,-50%);      
+}
+@media screen and (orientation: portrait) {
+    #device.desktop-false div#orient.orient-port .objview {
+        width: 100vw;    
+        height: 100vh;     
+    }
+}
+@media screen and (orientation: landscape) {
+    #device.desktop-false div#orient.orient-port .objview {
+ 
+        width: 99vh;        
+        height: 99vw;
+        -webkit-transform: translate(-50%,-50%)rotate(-90deg);        
+        -moz-transform: translate(-50%,-50%)rotate(-90deg);        
+        -ms-transform: translate(-50%,-50%)rotate(-90deg);        
+        transform: translate(-50%,-50%)rotate(-90deg);        
+         
+    }
+    div#orient.orient-port #orient-angle.deg270 .objview {     
+        -webkit-transform: translate(-50%,-50%)rotate(90deg);      
+        -moz-transform: translate(-50%,-50%)rotate(90deg);      
+        -ms-transform: translate(-50%,-50%)rotate(90deg);      
+        transform: translate(-50%,-50%)rotate(90deg);      
+    }    
+}
+
+@media screen and (orientation: landscape) {
+    #device.desktop-false div#orient.orient-land .objview {
+        width: 99vw;    
+        height: 90vh;     
+        margin-top: 0vh;
+
+    } 
+}
+@media screen and (orientation: portrait) {
+    #device.desktop-false div#orient.orient-land .objview {     
+        width: 99vh;        
+        height: 99vw;
+        position: absolute;
+        -webkit-transform: translate(-50%,-50%)rotate(90deg); 
+        -moz-transform: translate(-50%,-50%)rotate(90deg); 
+        -ms-transform: translate(-50%,-50%)rotate(90deg); 
+        transform: translate(-50%,-50%)rotate(90deg); 
+
+    }
+  
+}
+
+div#ivx-fullscreen {
+
+    background: #00aaff;
+
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    height: 20px;
+    width: 20px;
+    position: absolute;    
+    top: 5px; 
+    right: 5px;
+    
+}
+div#device.desktop-true.web-firefox div#orient:-moz-full-screen.orient-port  {
+        -moz-transform: translate(0); 
+}
+div#device.desktop-true.ie11 div#orient:-ms-fullscreen.orient-port  {
+        -ms-transform: translate(0%, -50%); 
+        left: 0%;
+}
+.ivx-hud {
+    display: none;
+
+    background: rgba(255,255,255,0.6);
+    color: #ffffff;
+    border-radius: 5vw;
+    text-shadow: #000000 5px 5px;
+    font-size: 5vw;
+    width: 80vw;
+
+    position: fixed;
+    top:  50%;
+    left: 50%;
+    -webkit-transform: translate(-50%,-50%);
+
+}
+.ivx-hud a {
+    background: #00ff00;
+    padding: 10px;
+    border-radius: 15px;
+    
+    
+    color: #000000;
+    text-shadow: 0 0 0;
+    text-decoration: none;
+    cursor: pointer;
+
+    margin-left: 4vw;
+    margin-right: 4vw;
+}
